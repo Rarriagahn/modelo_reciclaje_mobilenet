@@ -38,10 +38,10 @@ def cargar_clases():
     return ["cardboard", "glass", "metal", "paper", "plastic", "trash"]
 
 def preparar_imagen(img):
-    img = img.convert("RGB").resize(IMG_SIZE)
-    arr = np.array(img, dtype=np.float32)
-    arr = tf.keras.applications.mobilenet_v2.preprocess_input(arr)
-    return np.expand_dims(arr, axis=0)
+    imagen = tf.convert_to_tensor(np.array(img.convert("RGB")))
+    imagen = tf.image.resize(imagen, IMG_SIZE, method="bilinear")
+    imagen = tf.keras.applications.mobilenet_v2.preprocess_input(imagen)
+    return imagen[tf.newaxis, ...]
 
 def predecir(img):
     preds = modelo.predict(preparar_imagen(img), verbose=0)[0]
